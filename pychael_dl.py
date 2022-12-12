@@ -47,7 +47,7 @@ def get_video_dic(archive_url):
 	return video_dic
 
 
-def download_video_series(video_dic, save_path):
+def download_video_series(video_dic, save_path, vid_flag):
 
 	video_links = list(video_dic.keys())
 
@@ -55,6 +55,10 @@ def download_video_series(video_dic, save_path):
 
 		'''iterate through all links in video_links
 		and download them one by one'''
+
+		if vid_flag == vid_number:
+			print("\n{} videos have been downloaded! \nExiting code.".format(vid_number))
+			exit()
 		
 		# obtain filename by splitting url and getting
 		# last string
@@ -90,15 +94,19 @@ def download_video_series(video_dic, save_path):
 					f.flush
 		
 		print( "{} downloaded at {}!\n".format(file_name, save_path) )
+		vid_flag+=1
 
 	print ("All videos of this season downloaded!\n\n")
-	return
+	return vid_flag
 
 
 if __name__ == "__main__":
 
 	start_season = 1
 	end_season = 9
+
+	vid_number = 2
+	vid_flag = 0
 
 	main_path = r"/home/shuno/Downloads/The Office"
 
@@ -117,8 +125,11 @@ if __name__ == "__main__":
 
 		# getting all video links
 		video_dic = get_video_dic(archive_url)
-		print('{}\t{}\n'.format(len(video_dic),video_dic))
+		print('Season {} \nEpisodes: {}\n{}\n'.format(x,len(video_dic),video_dic))
 
 		# download all videos
-		download_video_series(video_dic, save_path)
+		vid_flag = download_video_series(video_dic, save_path, vid_flag)
+		if vid_flag == vid_number:
+			print("\n{} videos have been downloaded! \nExiting code.".format(vid_number))
+			exit()
 	
